@@ -28,6 +28,7 @@ var builder = WebApplication.CreateBuilder(args);
 
     builder.Services.AddSingleton<IDbConnectionFactory>(_ =>
         new SqliteConnectionFactory(builder.Configuration.GetConnectionString("Default")!));
+
     builder.Services.AddEndpoints<Program>(builder.Configuration);
 
     builder.Services.AddSingleton<DatabaseInitializer>();
