@@ -8,22 +8,6 @@ namespace Library.Api.Services
     {
         private readonly IDbConnectionFactory _connectionFactory = connectionFactory;
 
-        public async Task<bool> CreateAsync(Book book)
-        {
-            var existingBook = await GetByIsbnAsync(book.Isbn);
-            if (existingBook is not null)
-            {
-                return false;
-            }
-
-            using var connection = await _connectionFactory.CreateConnectionAsync();
-            var result = await connection.ExecuteAsync(
-                @"INSERT INTO Books (Isbn, Title, Author, ShortDescription, PageCount, ReleaseDate) 
-            VALUES (@Isbn, @Title, @Author, @ShortDescription, @PageCount, @ReleaseDate)",
-                book);
-            return result > 0;
-        }
-
         public async Task<Book?> GetByIsbnAsync(string isbn)
         {
             using var connection = await _connectionFactory.CreateConnectionAsync();
@@ -43,6 +27,23 @@ namespace Library.Api.Services
             return await connection.QueryAsync<Book>(
                 "SELECT * FROM Books WHERE Title LIKE '%' || @SearchTerm || '%'",
                 new { SearchTerm = searchTerm });
+        }
+
+
+        public async Task<bool> CreateAsync(Book book)
+        {
+            var existingBook = await GetByIsbnAsync(book.Isbn);
+            if (existingBook is not null)
+            {
+                return false;
+            }
+
+            using var connection = await _connectionFactory.CreateConnectionAsync();
+            var result = await connection.ExecuteAsync(
+                @"INSERT INTO Books (Isbn, Title, Author, ShortDescription, PageCount, ReleaseDate) 
+            VALUES (@Isbn, @Title, @Author, @ShortDescription, @PageCount, @ReleaseDate)",
+                book);
+            return result > 0;
         }
 
         public async Task<bool> UpdateAsync(Book book)
