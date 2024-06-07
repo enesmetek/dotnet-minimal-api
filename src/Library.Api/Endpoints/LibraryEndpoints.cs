@@ -1,8 +1,8 @@
-﻿using FluentValidation.Results;
-using FluentValidation;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using Library.Api.Endpoints.Internal;
 using Library.Api.Models;
 using Library.Api.Services;
-using Library.Api.Endpoints.Internal;
 
 namespace Library.Api.Endpoints
 {
@@ -55,9 +55,9 @@ namespace Library.Api.Endpoints
             if (!created)
             {
                 return Results.BadRequest(new List<ValidationFailure>
-            {
-                new("Isbn", "A book with this ISBN-13 already exists")
-            });
+                {
+                    new("Isbn", "A book with this ISBN-13 already exists.")
+                });
             }
 
             return Results.Created($"/{BaseRoute}/{book.Isbn}", book);

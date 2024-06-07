@@ -29,7 +29,6 @@ namespace Library.Api.Services
                 new { SearchTerm = searchTerm });
         }
 
-
         public async Task<bool> CreateAsync(Book book)
         {
             var existingBook = await GetByIsbnAsync(book.Isbn);
